@@ -24,6 +24,8 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
     {
         if(!instance){
             _instance = GetComponent<T>();
+        }else{
+            Destroy(this.gameObject);
         }
     }
 }
