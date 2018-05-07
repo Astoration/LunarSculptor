@@ -19,7 +19,7 @@ public class VerticalCameraTracker : MonoBehaviour {
     private void setupTrackingStream()
     {
         camera = GetComponent<Camera>();
-        var trigger = target.AddComponent<ObservableUpdateTrigger>();
+        var trigger = target.GetComponent<ObservableUpdateTrigger>() ?? target.AddComponent<ObservableUpdateTrigger>();
         var rigid = target.GetComponent<Rigidbody2D>();
         if (!rigid) return;
         if (isMinFromInitialPosition)

@@ -18,12 +18,20 @@ public class CharacterControl : MonoBehaviour {
 
     [Header("캐릭터 조작 정보")]
     public CharacterInfo info = new CharacterInfo();
+    public ReactiveProperty<bool> isGrounded = new ReactiveProperty<bool>(true);
+    private ObservableUpdateTrigger trigger;
 
     // Awake는 스크립트 인스턴스가 로드되는 중에 호출됩니다.
     private void Awake()
     {
+        initialTrigger();
         initialComponent();
         initialStream();
+    }
+
+    private void initialTrigger()
+    {
+        trigger = gameObject.GetComponent<ObservableUpdateTrigger>() ?? gameObject.AddComponent<ObservableUpdateTrigger>();
     }
 
     /// <summary>
@@ -34,6 +42,34 @@ public class CharacterControl : MonoBehaviour {
     private void initialStream()
     {
         setupInputStream();
+        setupStateStream();
+        setupAnimationStream();
+    }
+
+    /// <summary>
+    /// 상태 업데이트 스트림을 할당 합니다.
+    /// </summary>
+    /// <param>Void</param>
+    /// <returns>Void</returns>
+    private void setupStateStream()
+    {
+        trigger.UpdateAsObservable()
+              .Select(_ => Mathf.RoundToInt(transform.position.y))
+              .DistinctUntilChanged()
+              .ThrottleFrame(5)
+               .Where(_ => rigid.IsTouchingLayers())
+              .Subscribe(y => isGrounded.Value = true);
+    }
+
+    /// <summary>
+    /// 애니메이션 업데이트 스트림을 할당 합니다.
+    /// </summary>
+    /// <param>Void</param>
+    /// <returns>Void</returns>
+    private void setupAnimationStream()
+    {
+        isGrounded.AsObservable()
+                  .Subscribe(value => animator.SetBool("IsGrounded", value));
     }
 
     /// <summary>
@@ -49,7 +85,11 @@ public class CharacterControl : MonoBehaviour {
              .Select(jump => rigid.velocity.y) // 물리량의 y를 확인해서
              .Where(y => Mathf.Abs(y) < 0.01f) // 물리량이 없을때만
              .Select(y => rigid)
-             .Subscribe(rigid => rigid.AddForce(Vector2.up *info.jumpHeight)); //점프
+             .Subscribe(rigid =>
+             {
+                 rigid.AddForce(Vector2.up * info.jumpHeight);
+                 isGrounded.Value = false;
+             }); //점프
     }
 
 
