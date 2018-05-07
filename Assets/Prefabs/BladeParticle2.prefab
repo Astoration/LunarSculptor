@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4242122919518892}
   - component: {fileID: 212612940900557270}
   - component: {fileID: 114265832476782844}
+  - component: {fileID: 114151630524306044}
   m_Layer: 0
   m_Name: BladeParticle2
   m_TagString: Untagged
@@ -41,6 +42,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114151630524306044
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1676340385750440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72934482aaced43f4b95a09b769e6d94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114265832476782844
 MonoBehaviour:
   m_ObjectHideFlags: 1

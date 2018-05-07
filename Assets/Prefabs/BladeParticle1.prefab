@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4634471863776452}
   - component: {fileID: 212002492032152998}
   - component: {fileID: 114781252889477738}
+  - component: {fileID: 114977244336144296}
   m_Layer: 0
   m_Name: BladeParticle1
   m_TagString: Untagged
@@ -54,6 +55,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifetime: 0.5
   animateAlpha: 1
+--- !u!114 &114977244336144296
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1043320794690568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72934482aaced43f4b95a09b769e6d94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212002492032152998
 SpriteRenderer:
   m_ObjectHideFlags: 1

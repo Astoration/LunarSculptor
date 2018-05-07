@@ -2,16 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class SpritePool : MonoBehaviour {
     public static Hashtable pools = new Hashtable();
-    private SpriteRenderer spriteRenderer;
-
-    // Awake는 스크립트 인스턴스가 로드되는 중에 호출됩니다.
-    private void Awake()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-    }
 
     public static GameObject InstantiatePool(string name,Transform parent){
         Stack<GameObject> stack = null;

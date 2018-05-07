@@ -23,6 +23,9 @@ public class CharacterControl : MonoBehaviour {
     private int atkType = 1;
     private double AttackCoolTime = 0.1f;
     private bool isAtkReady = true;
+    private float attackRange = 5f;
+    private readonly int GroundLayer = 1<<8;
+    private readonly int DestructibleLayer = 9;
 
     // Awake는 스크립트 인스턴스가 로드되는 중에 호출됩니다.
     private void Awake()
@@ -60,8 +63,12 @@ public class CharacterControl : MonoBehaviour {
               .Select(_ => Mathf.RoundToInt(transform.position.y))
               .DistinctUntilChanged()
               .ThrottleFrame(5)
-               .Where(_ => rigid.IsTouchingLayers())
-              .Subscribe(y => isGrounded.Value = true);
+               .Where(_ => rigid.IsTouchingLayers(GroundLayer))
+               .Subscribe(y =>
+               {
+                   rigid.simulated = false;
+                   isGrounded.Value = true;
+               });
     }
 
     /// <summary>
@@ -91,6 +98,7 @@ public class CharacterControl : MonoBehaviour {
              .Subscribe(rigid =>
              {
                  rigid.AddForce(Vector2.up * info.jumpHeight);
+                 rigid.simulated = true;
                  isGrounded.Value = false;
              }); //점프
         input.attack
@@ -107,6 +115,11 @@ public class CharacterControl : MonoBehaviour {
         animator.SetInteger("AttackType", atkType);
         SpritePool.InstantiatePool("BladeParticle" + atkType,transform);
         isAtkReady = false;
+        if (GameManager.instance.destricbles.Count == 0) return;
+        var item = GameManager.instance.destricbles.Peek();
+        if (attackRange < Vector2.Distance(item.transform.position, transform.position)) return;
+        var destricble = item.GetComponent<Destructible>();
+        destricble.Damage(1);
     }
 
 
