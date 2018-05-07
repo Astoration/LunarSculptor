@@ -20,6 +20,9 @@ public class CharacterControl : MonoBehaviour {
     public CharacterInfo info = new CharacterInfo();
     public ReactiveProperty<bool> isGrounded = new ReactiveProperty<bool>(true);
     private ObservableUpdateTrigger trigger;
+    private int atkType = 1;
+    private double AttackCoolTime = 0.1f;
+    private bool isAtkReady = true;
 
     // Awake는 스크립트 인스턴스가 로드되는 중에 호출됩니다.
     private void Awake()
@@ -90,6 +93,20 @@ public class CharacterControl : MonoBehaviour {
                  rigid.AddForce(Vector2.up * info.jumpHeight);
                  isGrounded.Value = false;
              }); //점프
+        input.attack
+             .Where(atk => atk)
+             .Where(_ => isAtkReady)
+             .Do(atk => attack())
+             .Delay(System.TimeSpan.FromSeconds(AttackCoolTime))
+             .Subscribe(atk => isAtkReady = true);
+    }
+
+    private void attack()
+    {
+        atkType = (2 - atkType) + 1;
+        animator.SetInteger("AttackType", atkType);
+        SpritePool.InstantiatePool("BladeParticle" + atkType,transform);
+        isAtkReady = false;
     }
 
 
