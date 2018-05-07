@@ -23,7 +23,7 @@ public class CharacterControl : MonoBehaviour {
     private int atkType = 1;
     private double AttackCoolTime = 0.1f;
     private bool isAtkReady = true;
-    private float attackRange = 5f;
+    private float attackRange = 10f;
     private readonly int GroundLayer = 1<<8;
     private readonly int DestructibleLayer = 9;
 
