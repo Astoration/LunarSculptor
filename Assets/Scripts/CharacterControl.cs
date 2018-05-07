@@ -6,13 +6,17 @@ using UniRx;
 using UniRx.Triggers;
 
 [Serializable]
-public class CharacterInfo{
+public class CharacterInfo
+{
     public float jumpHeight = 15f;
     [HideInInspector]
     internal int hp = 3;
+    public float defenceCoolDown = 1f;
+    public float currentDef = 1f;
+    public float lunarGague = 0f;
 }
 
-public class CharacterControl : MonoBehaviour {
+public class CharacterControl : Singleton<CharacterControl> {
     Animator animator;
     Rigidbody2D rigid;
 
@@ -69,6 +73,13 @@ public class CharacterControl : MonoBehaviour {
                    rigid.simulated = false;
                    isGrounded.Value = true;
                });
+
+        trigger.UpdateAsObservable()
+               .Select(_ => info)
+               .Subscribe(info => GameManager.instance.updateCharacterUI(info));
+        trigger.UpdateAsObservable()
+               .Where(_ => info.currentDef < info.defenceCoolDown)
+               .Subscribe(_ => info.currentDef += Time.deltaTime);
     }
 
     /// <summary>
@@ -109,6 +120,7 @@ public class CharacterControl : MonoBehaviour {
              .Subscribe(atk => isAtkReady = true);
         input.defence
              .Where(defence => defence)
+             .Where(defence => info.defenceCoolDown<=info.currentDef)
              .Subscribe(def => defence());
     }
 
@@ -122,6 +134,7 @@ public class CharacterControl : MonoBehaviour {
         if (attackRange < Vector2.Distance(item.transform.position, transform.position)) return;
         var destricbleRigid = item.GetComponentInParent<Rigidbody2D>();
         destricbleRigid.velocity = Vector2.up * 10f;
+        info.currentDef = 0f;
     }
 
     private void attack()
@@ -134,7 +147,8 @@ public class CharacterControl : MonoBehaviour {
         var item = GameManager.instance.destricbles.Peek();
         if (attackRange < Vector2.Distance(item.transform.position, transform.position)) return;
         var destricble = item.GetComponent<Destructible>();
-        destricble.Damage(1);
+        if (destricble.Damage(1))
+            info.lunarGague += UnityEngine.Random.Range(1f, 5f);
     }
 
 

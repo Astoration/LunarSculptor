@@ -4,15 +4,39 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using System;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager> {
     public Queue<GameObject> destricbles = new Queue<GameObject>();
     private ObservableUpdateTrigger trigger;
+
+    public int wave = 1;
+
+    public Image defenceCoolDown;
+    public Image lunarCoolDown;
+    public List<Image> hps;
+
+    public Image hpBar;
+    public Text hpContent;
+
     // Awake는 스크립트 인스턴스가 로드되는 중에 호출됩니다.
     protected override void Awake(){
         base.Awake();
         initGameFlowStream();
         startGame();
+    }
+
+    private void Update()
+    {
+        updateEnemyHP();
+    }
+
+    private void updateEnemyHP()
+    {
+        if (destricbles.Count == 0) return;
+        var top = destricbles.Peek().GetComponent<Destructible>();
+        hpBar.fillAmount = (float)top.hp.Value / (float)top.maxHp;
+        hpContent.text = "HP : " + top.hp.Value;
     }
 
     private void startGame()
@@ -36,7 +60,20 @@ public class GameManager : Singleton<GameManager> {
         for (var i = item.transform.childCount - 1; 0 <= i;i--){
             var child = item.transform.GetChild(i);
             child.gameObject.SetActive(true);
+            int level = 1 + wave / 10;
+            child.GetComponent<Destructible>().init(level + UnityEngine.Random.Range(0, level));
             destricbles.Enqueue(child.gameObject);
+        }
+        wave++;
+    }
+
+    public void updateCharacterUI(CharacterInfo info){
+        defenceCoolDown.fillAmount = 1 - info.currentDef / info.defenceCoolDown;
+        lunarCoolDown.fillAmount = 1 - info.lunarGague / 100f;
+        var hp = info.hp;
+        for (var i = 0; i < hps.Count;i++){
+            var item = hps[i];
+            item.enabled = i < hp;
         }
     }
 }

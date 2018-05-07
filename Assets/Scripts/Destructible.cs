@@ -32,8 +32,9 @@ public class Destructible : MonoBehaviour {
         hp.Value = maxHp;
     }
 
-    public void Damage(int amount){
+    public bool Damage(int amount){
         hp.Value -= amount;
+        return hp.Value <= 0;
     }
 
     public void Kill(){
@@ -49,8 +50,9 @@ public class Destructible : MonoBehaviour {
         if (disabled) parent.GetComponent<SpritePool>().DestroyPool();
     }
 
-    // Update is called once per frame
-	void Update () {
-		
-	}
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.gameObject.CompareTag("Ground")) return;
+        CharacterControl.instance.info.hp -= 1;
+    }
 }
