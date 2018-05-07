@@ -107,6 +107,21 @@ public class CharacterControl : MonoBehaviour {
              .Do(atk => attack())
              .Delay(System.TimeSpan.FromSeconds(AttackCoolTime))
              .Subscribe(atk => isAtkReady = true);
+        input.defence
+             .Where(defence => defence)
+             .Subscribe(def => defence());
+    }
+
+    private void defence()
+    {
+        atkType = (2 - atkType) + 1;
+        animator.SetInteger("AttackType", atkType);
+        SpritePool.InstantiatePool("BladeParticle" + atkType, transform);
+        if (GameManager.instance.destricbles.Count == 0) return;
+        var item = GameManager.instance.destricbles.Peek();
+        if (attackRange < Vector2.Distance(item.transform.position, transform.position)) return;
+        var destricbleRigid = item.GetComponentInParent<Rigidbody2D>();
+        destricbleRigid.velocity = Vector2.up * 10f;
     }
 
     private void attack()
