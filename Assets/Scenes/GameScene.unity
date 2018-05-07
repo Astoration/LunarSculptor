@@ -946,6 +946,7 @@ GameObject:
   - component: {fileID: 583694511}
   - component: {fileID: 583694510}
   - component: {fileID: 583694509}
+  - component: {fileID: 583694512}
   m_Layer: 8
   m_Name: background
   m_TagString: Ground
@@ -1037,6 +1038,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &583694512
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 583694508}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
 --- !u!1 &644164028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,6 +1250,8 @@ MonoBehaviour:
     defenceCoolDown: 1
     currentDef: 1
     lunarGague: 0
+  skillObject: {fileID: 1508515981891538, guid: 7f19413380416408185206331c01ca60,
+    type: 2}
 --- !u!61 &649508399
 BoxCollider2D:
   m_ObjectHideFlags: 0
