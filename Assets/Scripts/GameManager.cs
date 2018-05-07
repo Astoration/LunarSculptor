@@ -5,8 +5,11 @@ using UniRx;
 using UniRx.Triggers;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager> {
+    public int score;
+
     public Queue<GameObject> destricbles = new Queue<GameObject>();
     private ObservableUpdateTrigger trigger;
 
@@ -18,6 +21,9 @@ public class GameManager : Singleton<GameManager> {
 
     public Image hpBar;
     public Text hpContent;
+
+    public GameObject gameOverPanel;
+    public Text scoreContent;
 
     // Awake는 스크립트 인스턴스가 로드되는 중에 호출됩니다.
     protected override void Awake(){
@@ -46,6 +52,7 @@ public class GameManager : Singleton<GameManager> {
 
     private void initGameFlowStream()
     {
+        Time.timeScale = 1f;
         trigger = GetComponent<ObservableUpdateTrigger>() ?? gameObject.AddComponent<ObservableUpdateTrigger>();
         trigger.UpdateAsObservable()
                .Select(_ => destricbles.Count)
@@ -71,9 +78,20 @@ public class GameManager : Singleton<GameManager> {
         defenceCoolDown.fillAmount = 1 - info.currentDef / info.defenceCoolDown;
         lunarCoolDown.fillAmount = 1 - info.lunarGague / 100f;
         var hp = info.hp;
+        if (hp == 0) GameOver();
         for (var i = 0; i < hps.Count;i++){
             var item = hps[i];
             item.enabled = i < hp;
         }
+    }
+
+    public void GameOver(){
+        gameOverPanel.SetActive(true);
+        scoreContent.text = score + "%";
+        Time.timeScale = 0;
+    }
+
+    public void BackMain(){
+        SceneManager.LoadScene(0);
     }
 }

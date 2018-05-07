@@ -47,6 +47,7 @@ public class Destructible : MonoBehaviour {
             var child = parent.GetChild(i);
             if(child.gameObject.activeSelf) disabled = !child.gameObject.activeSelf;
         }
+        GameManager.instance.score += maxHp * 100;
         if (disabled) parent.GetComponent<SpritePool>().DestroyPool();
     }
 
