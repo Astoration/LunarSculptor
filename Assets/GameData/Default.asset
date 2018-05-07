@@ -11,9 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64247335d360d4ee88dd6833ba79b036, type: 3}
   m_Name: Default
   m_EditorClassIdentifier: 
-  name: 
-  description: 
-  image: {fileID: 0}
-  damge: 0
-  damageRatio: 0
+  name: "\uCD5C\uACE0\uC758 \uBB34\uAE30\uB294 \uC2E4\uB825\uC774\uB2E4"
+  description: "\uD15C\uD0D3\uD558\uC9C0 \uB9C8\uC2ED\uC2DC\uC624"
+  image: {fileID: 21300000, guid: e9b324741640242448b7408839bbd1b5, type: 3}
+  damge: 1
+  damageRatio: 1
   lunarBoost: 0
