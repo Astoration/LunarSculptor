@@ -40,6 +40,13 @@ public class Destructible : MonoBehaviour {
         SpritePool.InstantiatePool("DestricbleParticle", transform.position, Quaternion.identity);
         gameObject.SetActive(false);
         GameManager.instance.destricbles.Dequeue();
+        var parent = transform.parent;
+        bool disabled = true;
+        for (var i = 0; i < parent.childCount;i++){
+            var child = parent.GetChild(i);
+            if(child.gameObject.activeSelf) disabled = !child.gameObject.activeSelf;
+        }
+        if (disabled) parent.GetComponent<SpritePool>().DestroyPool();
     }
 
     // Update is called once per frame

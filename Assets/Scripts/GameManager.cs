@@ -35,6 +35,7 @@ public class GameManager : Singleton<GameManager> {
         var item = SpritePool.InstantiatePool("Destricble1", transform.position, Quaternion.identity);
         for (var i = item.transform.childCount - 1; 0 <= i;i--){
             var child = item.transform.GetChild(i);
+            child.gameObject.SetActive(true);
             destricbles.Enqueue(child.gameObject);
         }
     }
